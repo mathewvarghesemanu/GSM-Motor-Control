@@ -13,7 +13,7 @@ void setup()
   Serial.println("Calling through GSM Modem");
   mySerial.begin(9600);
   delay(2000);
-  mySerial.println("ATD81290255XX;"); // ATD81290255XX; -- watch out here for semicolon at the end!!
+  mySerial.println("919446050001;"); // ATD81290255XX; -- watch out here for semicolon at the end!!
   Serial.println("Called ATD81290255XX");
 }
 
