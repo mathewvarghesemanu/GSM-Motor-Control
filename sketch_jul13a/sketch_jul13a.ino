@@ -1,33 +1,38 @@
 #include<SoftwareSerial.h>
-char c[30];
-int flag = 0, i;
 
-void setup() {
-  // put your setup code here, to run once:
+char phone_no[]="9446050001";
+SoftwareSerial myserial(11,10);
+
+void setup()
+{
   Serial.begin(9600);
-  SoftwareSerial myserial(11, 10);
+  delay(200);
   myserial.begin(9600);
-
+  delay(200);
+  myserial.println("AT+CMGF=1");
+  delay(200);
 }
 
-void loop() {
-  while (Serial.available())
-  { i = 0;
-  //  while (c[i] != '\0')
-    {
-      c[i] = Serial.read();
-      i++;
-      if (c[i] == '\n')
-        {
-          c[i] == '\0';
-        }
-     
-      delay(200);
-    }
-     Serial.print(c);
-  }
-  if (strcmp(c, "man") == 0)
-  {
-    Serial.print("u");
-  }
+String sendsms(String sms)
+{
+  delay(1000);  
+  myserial.print("AT+CMGS=\"");
+  myserial.print(phone_no);
+  myserial.println("\"");
+
+  delay(1000);
+
+  myserial.print(sms);
+  myserial.print(0x1A);
+  delay(1000);
 }
+
+int main(void)
+{
+  String a;
+  a=sendsms("HI");
+  Serial.print(a);
+  while(1);
+  return(0);
+}
+
