@@ -1,15 +1,15 @@
 int fonafoundpin = 3;
 int motorstatus = 0;
-int flag=0;
+int flag = 0;
 const int MotorPin = 5;
 char sendto[] = "9446050001";
-char sms[21];
+char sms[21] = "Motor status";;
 
 #include "Adafruit_FONA.h"
 #define FONA_RX 11
 #define FONA_TX 10
 #define FONA_RST 4
-                  char replybuffer[255];
+char replybuffer[255];
 #include <SoftwareSerial.h>
 SoftwareSerial fonaSS = SoftwareSerial(FONA_TX, FONA_RX);
 SoftwareSerial *fonaSerial = &fonaSS;
@@ -141,11 +141,11 @@ void loop()
   else if (sms == "is ok")
     sendsms("I'm fine");
   else if (sms == "Motor status")
-    if (motorstatus == 0)
+    if (motorstatus == 1)
       sendsms("Motor on");
-    else if (motorstatus == 1)
+    else if (motorstatus == 0)
       sendsms("Motor off");
-
+  while (1);
 
   while (! Serial.available() )
   {
