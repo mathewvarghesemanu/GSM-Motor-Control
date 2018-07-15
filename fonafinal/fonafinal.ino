@@ -185,7 +185,7 @@ void loop()
     else if (motorstatus == 0)
       sendsms("Motor off");
   }
-  
+  while(!fona.available());
 
 }
 
