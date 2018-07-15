@@ -305,7 +305,6 @@ uint16_t readnumber() {
   }
   return x;
 }
-
 uint8_t readline(char *buff, uint8_t maxbuff, uint16_t timeout) {
   uint16_t buffidx = 0;
   boolean timeoutvalid = true;
@@ -344,3 +343,5 @@ uint8_t readline(char *buff, uint8_t maxbuff, uint16_t timeout) {
   buff[buffidx] = 0;  // null term
   return buffidx;
 }
+
+
