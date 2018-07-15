@@ -1,11 +1,15 @@
 int fonafoundpin = 3;
-
+int motorstatus = 0;
+int flag=0;
+const int MotorPin = 5;
+char sendto[] = "9446050001";
+char sms[21];
 
 #include "Adafruit_FONA.h"
 #define FONA_RX 11
 #define FONA_TX 10
 #define FONA_RST 4
-char replybuffer[255];
+                  char replybuffer[255];
 #include <SoftwareSerial.h>
 SoftwareSerial fonaSS = SoftwareSerial(FONA_TX, FONA_RX);
 SoftwareSerial *fonaSerial = &fonaSS;
@@ -53,6 +57,9 @@ uint8_t readline(char *buff, uint8_t maxbuff, uint16_t timeout) {
 uint8_t type;
 void setup()
 {
+  pinMode(MotorPin, OUTPUT);
+  digitalWrite(MotorPin, LOW);
+
   pinMode(fonafoundpin, OUTPUT);
   digitalWrite(fonafoundpin, LOW);
   while (!Serial);
@@ -75,8 +82,71 @@ void setup()
 
   }
 }
+
+
+void flushSerial() {
+  while (Serial.available())
+    Serial.read();
+}
+
+
+void deletesms()
+{
+  flushSerial();
+  Serial.print(F("Delete #"));
+  uint8_t smsn;
+  for (smsn = 1; smsn < 20; smsn++)
+    if (fona.deleteSMS(smsn)) {
+      Serial.println(F("OK! deleted"));
+    } else {
+      Serial.println(F("Couldn't delete"));
+    }
+}
+
+void sendsms(char message[])
+{
+  flushSerial();
+  if (!fona.sendSMS(sendto, message)) {
+    Serial.println(F("Failed"));
+  } else {
+    Serial.println(F("Sent sms!"));
+    Serial.println(message);
+  }
+}
+
+
+
 void loop()
 {
+  deletesms();
+  //readsms();
+  if (sms == "Alert on")
+    flag = 1;
+  else if (sms == "Alert off")
+    flag = 0;
+  else if (sms == "Motor on")
+  {
+    digitalWrite(MotorPin, HIGH);
+    motorstatus = 1;
+    if (flag == 1)
+      sendsms("Motor off");
+  }
+  else if (sms == "Motor off")
+  {
+    digitalWrite(MotorPin, LOW);
+    motorstatus = 0;
+    if (flag == 1)
+      sendsms("Motor off");
+  }
+  else if (sms == "is ok")
+    sendsms("I'm fine");
+  else if (sms == "Motor status")
+    if (motorstatus == 0)
+      sendsms("Motor on");
+    else if (motorstatus == 1)
+      sendsms("Motor off");
+
+
   while (! Serial.available() )
   {
     if (fona.available())

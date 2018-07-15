@@ -131,6 +131,7 @@ void loop() {
           Serial.println(F("Could not read # SMS"));
         } else {
           Serial.print(smsnum);
+          Serial.print(smsnum);
           Serial.println(F(" SMS's on SIM card!"));
         }
         break;
@@ -214,7 +215,7 @@ void loop() {
 
     case 's': {
         // send an SMS!
-        char sendto[21], message[141];
+        String sendto[21], message[141];
         flushSerial();
         Serial.print(F("Send to #"));
         readline(sendto, 20);
