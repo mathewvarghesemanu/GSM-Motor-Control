@@ -63,11 +63,7 @@ void loop() {
   char command = Serial.read();
   Serial.println(command);
 
-Serial.println(replybuffer);
-Serial.println(replybuffer);
-Serial.println(replybuffer);
-Serial.println(replybuffer);
-Serial.println(replybuffer);
+
   switch (command) {
     case '?': {
         printMenu();
@@ -164,7 +160,7 @@ Serial.println(replybuffer);
         Serial.print(" ("); Serial.print(smslen); Serial.println(F(") bytes *****"));
         Serial.println(replybuffer);
         Serial.println(F("*****"));
-replybuffer[0]='\0';
+
         break;
       }
     case 'R': {

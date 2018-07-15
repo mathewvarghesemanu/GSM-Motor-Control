@@ -64,7 +64,7 @@ void setup()
   pinMode(fonafoundpin, OUTPUT);
   digitalWrite(fonafoundpin, LOW);
 
-  deletesms();
+
 
   while (!Serial);
 
@@ -85,6 +85,8 @@ void setup()
     type = fona.type();
 
   }
+
+    deletesms();
 }
 
 
@@ -143,6 +145,7 @@ void readsms()
 
 void loop()
 {
+  Serial.print("started");
   sms = "";
   replybuffer[0]='\0';
   delay(2000);
@@ -151,7 +154,11 @@ void loop()
   
 
   if (sms == "Alert on")
-    flag = 1;
+    {
+      flag = 1;
+      sendsms("Alert on");
+    }
+    
   else if (sms == "Alert off")
     flag = 0;
   else if (sms == "Motor on")
@@ -159,7 +166,7 @@ void loop()
     digitalWrite(MotorPin, HIGH);
     motorstatus = 1;
     if (flag == 1)
-      sendsms("Motor off");
+      sendsms("Motor on");
   }
   else if (sms == "Motor off")
   {
@@ -178,15 +185,7 @@ void loop()
     else if (motorstatus == 0)
       sendsms("Motor off");
   }
-  while (1);
-
-  while (! Serial.available() )
-  {
-    if (fona.available())
-    {
-      Serial.write(fona.read());
-    }
-  }
+  
 
 }
 
