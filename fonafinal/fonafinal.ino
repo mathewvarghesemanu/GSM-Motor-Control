@@ -3,7 +3,7 @@ int motorstatus = 0;
 int flag = 0;
 const int MotorPin = 5;
 char sendto[] = "9446050001";
-char sms[21] = "Motor status";;
+String sms = "";
 
 #include "Adafruit_FONA.h"
 #define FONA_RX 11
@@ -106,9 +106,11 @@ void deletesms()
 void sendsms(char message[])
 {
   flushSerial();
-  if (!fona.sendSMS(sendto, message)) {
+  if (!fona.sendSMS(sendto, message)) 
+  {
     Serial.println(F("Failed"));
-  } else {
+  } else 
+  {
     Serial.println(F("Sent sms!"));
     Serial.println(message);
   }
@@ -116,9 +118,25 @@ void sendsms(char message[])
 
 
 
+/*void sendsms(char message[])
+{
+  delay(1000);  
+  fona.print("AT+CMGS=\"");
+  fona.print(sendto);
+  fona.println("\"");
+
+  delay(1000);
+
+  fona.print(message);
+  fona.print(0x1A);
+  delay(1000);
+}
+*/
+
 void loop()
 {
   deletesms();
+  delay(3000);
   //readsms();
   if (sms == "Alert on")
     flag = 1;
@@ -141,10 +159,13 @@ void loop()
   else if (sms == "is ok")
     sendsms("I'm fine");
   else if (sms == "Motor status")
+  {
+    Serial.print("worked");
     if (motorstatus == 1)
       sendsms("Motor on");
     else if (motorstatus == 0)
       sendsms("Motor off");
+  }
   while (1);
 
   while (! Serial.available() )

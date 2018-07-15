@@ -215,11 +215,12 @@ void loop() {
 
     case 's': {
         // send an SMS!
-        String sendto[21], message[141];
+        char sendto[21], message[141];
+        
         flushSerial();
         Serial.print(F("Send to #"));
         readline(sendto, 20);
-        Serial.println(sendto);
+        Serial.print(sendto);
         Serial.print(F("Type out one-line message (140 char): "));
         readline(message, 140);
         Serial.println(message);
