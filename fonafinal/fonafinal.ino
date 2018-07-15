@@ -133,6 +133,7 @@ void readsms()
   {
     Serial.println("Failed!");
   }
+  sms=sms+replybuffer;
   Serial.println(replybuffer);
   //sms.toCharArray(char_array, str_len);
 //  sms=replybuffer;
@@ -147,6 +148,7 @@ void loop()
   delay(2000);
   readsms();
   delay(2000);
+  
 
   if (sms == "Alert on")
     flag = 1;
