@@ -19,20 +19,20 @@ void setup() {
 
   Serial.begin(9600);
   fonaSerial->begin(9600);
-  
+
   if (! fona.begin(*fonaSerial)) {
     Serial.println(F("Couldn't find FONA"));
     while (1);
   }
   type = fona.type();
-  
+
   printMenu();
 }
 
 void printMenu(void) {
   Serial.println(F("-------------------------------------"));
   Serial.println(F("[?] Print this menu"));
- 
+
   // Phone
   Serial.println(F("[c] make phone Call"));
   Serial.println(F("[A] get call status"));
@@ -63,14 +63,18 @@ void loop() {
   char command = Serial.read();
   Serial.println(command);
 
-
+Serial.println(replybuffer);
+Serial.println(replybuffer);
+Serial.println(replybuffer);
+Serial.println(replybuffer);
+Serial.println(replybuffer);
   switch (command) {
     case '?': {
         printMenu();
         break;
       }
 
-   
+
 
     /*** Call ***/
     case 'c': {
@@ -101,7 +105,7 @@ void loop() {
         }
         break;
       }
-      
+
     case 'h': {
         // hang up!
         if (! fona.hangUp()) {
@@ -160,7 +164,7 @@ void loop() {
         Serial.print(" ("); Serial.print(smslen); Serial.println(F(") bytes *****"));
         Serial.println(replybuffer);
         Serial.println(F("*****"));
-
+replybuffer[0]='\0';
         break;
       }
     case 'R': {
@@ -216,7 +220,7 @@ void loop() {
     case 's': {
         // send an SMS!
         char sendto[21], message[141];
-        
+
         flushSerial();
         Serial.print(F("Send to #"));
         readline(sendto, 20);
@@ -234,26 +238,26 @@ void loop() {
       }
 
     case 'u': {
-      // send a USSD!
-      char message[141];
-      flushSerial();
-      Serial.print(F("Type out one-line message (140 char): "));
-      readline(message, 140);
-      Serial.println(message);
+        // send a USSD!
+        char message[141];
+        flushSerial();
+        Serial.print(F("Type out one-line message (140 char): "));
+        readline(message, 140);
+        Serial.println(message);
 
-      uint16_t ussdlen;
-      if (!fona.sendUSSD(message, replybuffer, 250, &ussdlen)) { // pass in buffer and max len!
-        Serial.println(F("Failed"));
-      } else {
-        Serial.println(F("Sent!"));
-        Serial.print(F("***** USSD Reply"));
-        Serial.print(" ("); Serial.print(ussdlen); Serial.println(F(") bytes *****"));
-        Serial.println(replybuffer);
-        Serial.println(F("*****"));
+        uint16_t ussdlen;
+        if (!fona.sendUSSD(message, replybuffer, 250, &ussdlen)) { // pass in buffer and max len!
+          Serial.println(F("Failed"));
+        } else {
+          Serial.println(F("Sent!"));
+          Serial.print(F("***** USSD Reply"));
+          Serial.print(" ("); Serial.print(ussdlen); Serial.println(F(") bytes *****"));
+          Serial.println(replybuffer);
+          Serial.println(F("*****"));
+        }
       }
-    }
 
-  
+
 
     case 'S': {
         Serial.println(F("Creating SERIAL TUBE"));

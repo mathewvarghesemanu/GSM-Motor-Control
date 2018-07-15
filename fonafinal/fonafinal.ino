@@ -3,7 +3,8 @@ int motorstatus = 0;
 int flag = 0;
 const int MotorPin = 5;
 char sendto[] = "9446050001";
-String sms = "";
+String sms;
+
 
 #include "Adafruit_FONA.h"
 #define FONA_RX 11
@@ -62,6 +63,9 @@ void setup()
 
   pinMode(fonafoundpin, OUTPUT);
   digitalWrite(fonafoundpin, LOW);
+
+  deletesms();
+
   while (!Serial);
 
   Serial.begin(9600);
@@ -106,38 +110,44 @@ void deletesms()
 void sendsms(char message[])
 {
   flushSerial();
-  if (!fona.sendSMS(sendto, message)) 
+  if (!fona.sendSMS(sendto, message))
   {
     Serial.println(F("Failed"));
-  } else 
+  } else
   {
     Serial.println(F("Sent sms!"));
     Serial.println(message);
   }
 }
 
-
-
-/*void sendsms(char message[])
+void readsms()
 {
-  delay(1000);  
-  fona.print("AT+CMGS=\"");
-  fona.print(sendto);
-  fona.println("\"");
+  flushSerial();
+  Serial.print(F("Read #"));
+  uint8_t smsn = 1;
+  uint16_t smslen;
 
-  delay(1000);
 
-  fona.print(message);
-  fona.print(0x1A);
-  delay(1000);
+
+  if (! fona.readSMS(smsn, replybuffer, 250, &smslen))
+  {
+    Serial.println("Failed!");
+  }
+  Serial.println(replybuffer);
+  //sms.toCharArray(char_array, str_len);
+//  sms=replybuffer;
+  deletesms();
 }
-*/
+
 
 void loop()
 {
-  deletesms();
-  delay(3000);
-  //readsms();
+  sms = "";
+  replybuffer[0]='\0';
+  delay(2000);
+  readsms();
+  delay(2000);
+
   if (sms == "Alert on")
     flag = 1;
   else if (sms == "Alert off")
