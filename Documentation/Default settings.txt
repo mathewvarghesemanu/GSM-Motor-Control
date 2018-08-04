@@ -1,0 +1,2 @@
+Alert flag=0		no alert on sms
+motorstatus=0		motor off default

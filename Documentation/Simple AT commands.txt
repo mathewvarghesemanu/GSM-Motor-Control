@@ -1,0 +1,6 @@
+AT+CCID				Sim Number
+AT+COPS				Network Name
+AT+CSQ				Signal Strength
+ATDphoneno			Call phone number
+AT+CMGF=1			SMS mode
+AT+CMGS="phoneno"	Send SMS
