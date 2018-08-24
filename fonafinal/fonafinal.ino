@@ -1,7 +1,9 @@
 int fonafoundpin = 3;
 int motorstatus = 0;
 int flag = 0;
-const int MotorPin = 5;
+const int MotorPin = A5;
+const int PowerPin = A2;
+const int MotorIndicator=A4;
 char sendto[] = "9446050001";
 String sms;
 
@@ -60,6 +62,12 @@ void setup()
 {
   pinMode(MotorPin, OUTPUT);
   digitalWrite(MotorPin, LOW);
+
+  pinMode(PowerPin, OUTPUT);
+  digitalWrite(PowerPin, HIGH); 
+
+  pinMode(MotorIndicator, OUTPUT);
+  digitalWrite(MotorIndicator, LOW);
 
   pinMode(fonafoundpin, OUTPUT);
   digitalWrite(fonafoundpin, LOW);
@@ -164,6 +172,7 @@ void loop()
   else if (sms == "Motor on")
   {
     digitalWrite(MotorPin, HIGH);
+     digitalWrite(MotorIndicator, HIGH);
     motorstatus = 1;
     if (flag == 1)
       sendsms("Motor on");
@@ -171,6 +180,7 @@ void loop()
   else if (sms == "Motor off")
   {
     digitalWrite(MotorPin, LOW);
+     digitalWrite(MotorIndicator, LOW);
     motorstatus = 0;
     if (flag == 1)
       sendsms("Motor off");
